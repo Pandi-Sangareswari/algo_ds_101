@@ -1,0 +1,94 @@
+//PRINT BOUNDARY SUM OF A BINARY TREE
+
+#include <bits/stdc++.h>
+using namespace std;
+
+
+class tree{
+	public:
+		int data;
+		tree *left;
+		tree *right;
+};
+
+
+int findBoundarySum(tree* root){ 
+if(root==NULL)
+	return 0;
+int sum=0; //(step1)
+sum+=root->data; 
+
+tree* temp=root, *store; //copy root to temp
+queue<tree*> q; //creat a queue to store tree* variables (pointer to nodes)
+
+
+q.push(temp);
+while(!q.empty()){
+	store=q.front();
+	q.pop();
+	// if left & right both pointers are NULL, it's a leaf node
+	if(store->left==NULL && store->right==NULL) 
+		sum+=store->data; // add leaf node value
+	if(store->left)
+		q.push(store->left);
+	if(store->right)
+		q.push(store->right);
+}
+
+
+
+
+temp=root->left;
+while(!(temp->right==NULL && temp->left==NULL)){//avoiding leaf node
+	sum+=temp->data;
+	if(temp->left)
+		temp=temp->left;
+	else
+		temp=temp->right;
+}
+
+
+
+temp=root->right;
+while(!(temp->right==NULL && temp->left==NULL)){//avoiding leaf node
+	sum+=temp->data;
+	if(temp->right)
+		temp=temp->right;
+	else
+		temp=temp->left;
+}
+
+//boundary sum is now calculated, return it
+return sum;
+}
+
+// creating new node
+tree* newnode(int data)  
+{ 
+	tree* node = (tree*)malloc(sizeof(tree)); 
+	node->data = data; 
+	node->left = NULL; 
+	node->right = NULL; 
+	return(node); 
+} 
+
+int main() 
+{ 
+	
+	cout<<"Tree is built like the example aforesaid"<<endl;
+	
+	tree *root=newnode(2); 
+	root->left= newnode(7); 
+	root->right= newnode(5); 
+	root->right->right=newnode(9);
+	root->right->right->left=newnode(4);
+	root->left->left=newnode(2); 
+	root->left->right=newnode(6);
+	root->left->right->left=newnode(5);
+	root->left->right->right=newnode(11);
+
+	cout<<"finding boundary sum......"<<endl; 
+	cout<<"boundary sum is "<<findBoundarySum(root)<<endl;
+
+	return 0; 
+} 
